@@ -1,0 +1,19 @@
+/* Styles for any floating buttons/tooltips injected into the active webpage */
+.mitra-ai-floating-btn {
+    position: absolute;
+    z-index: 999999;
+    background: #6366f1;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.mitra-ai-floating-btn:hover {
+    transform: scale(1.05);
+}
