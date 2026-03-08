@@ -1,0 +1,18 @@
+{
+  "name": "bot_extension",
+  "version": "1.0.0",
+  "description": "Welcome to the **AI Assistant Chrome Extension** project! This is a powerful, modern browser extension designed to bring the capabilities of Large Language Models (LLMs) directly to any webpage you visit.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "marked": "^17.0.4"
+  }
+}
