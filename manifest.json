@@ -1,42 +1,29 @@
 {
-  "manifest_version": 3,
-  "name": "Mitra AI - Your Smart Assistant",
-  "version": "1.0",
-  "description": "An AI assistant to summarize, explain, translate, and chat with any webpage context.",
-  "permissions": [
-    "activeTab",
-    "storage",
-    "contextMenus",
-    "scripting"
-  ],
-  "host_permissions": [
-    "<all_urls>"
-  ],
-  "background": {
-    "service_worker": "src/background/background.js",
-    "type": "module"
-  },
-  "action": {
-    "default_popup": "src/popup/popup.html",
-    "default_title": "Mitra AI Assistant"
-  },
-  "options_page": "src/options/options.html",
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "src/content/content.js"
-      ],
-      "css": [
-        "src/content/content.css"
-      ]
-    }
-  ],
-  "icons": {
-    "16": "assets/icons/icon16.png",
-    "48": "assets/icons/icon48.png",
-    "128": "assets/icons/icon128.png"
-  }
+	"manifest_version": 3,
+	"name": "Mitra AI - Your Smart Assistant",
+	"version": "1.0",
+	"description": "An AI assistant to summarize, explain, translate, and chat with any webpage context.",
+	"permissions": ["activeTab", "storage", "contextMenus", "scripting"],
+	"host_permissions": ["<all_urls>"],
+	"background": {
+		"service_worker": "src/background/background.js",
+		"type": "module"
+	},
+	"action": {
+		"default_popup": "src/popup/popup.html",
+		"default_title": "Mitra AI Assistant"
+	},
+	"options_page": "src/options/options.html",
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["src/content/content.js"],
+			"css": ["src/content/content.css"]
+		}
+	],
+	"icons": {
+		"16": "assets/icons/icon16.png",
+		"48": "assets/icons/icon48.png",
+		"128": "assets/icons/icon128.png"
+	}
 }

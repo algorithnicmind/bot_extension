@@ -4,10 +4,10 @@
 console.log("Mitra AI Content Script loaded");
 
 // Example: Listen for selected text on the DOM
-document.addEventListener('mouseup', function() {
-    let selectedText = window.getSelection().toString().trim();
-    if (selectedText.length > 5) {
-        // We can spawn a floating tooltip here
-        console.log("User selected text:", selectedText);
-    }
+document.addEventListener("mouseup", function () {
+	let selectedText = window.getSelection().toString().trim();
+	if (selectedText.length > 5) {
+		// We can spawn a floating tooltip here
+		console.log("User selected text:", selectedText);
+	}
 });
