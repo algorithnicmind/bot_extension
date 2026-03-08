@@ -14,5 +14,6 @@
   "license": "ISC",
   "dependencies": {
     "marked": "^17.0.4"
-  }
+  },
+  "devDependencies": {}
 }
