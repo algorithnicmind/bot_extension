@@ -1,7 +1,7 @@
 importScripts("../../assets/lib/marked.umd.js");
 
 // Basic background worker
-console.log("Mitra AI Background Assistant started.");
+console.log("AI Background Assistant started.");
 
 // Keep track of any open popup or state if needed
 // (State can be added here if background needs to maintain memory across interactions)

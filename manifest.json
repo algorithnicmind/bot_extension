@@ -1,6 +1,6 @@
 {
 	"manifest_version": 3,
-	"name": "Mitra AI - Your Smart Assistant",
+	"name": "AI Assistant - Your Smart Companion",
 	"version": "1.0",
 	"description": "An AI assistant to summarize, explain, translate, and chat with any webpage context.",
 	"permissions": ["activeTab", "storage", "contextMenus", "scripting"],
@@ -11,7 +11,7 @@
 	},
 	"action": {
 		"default_popup": "src/popup/popup.html",
-		"default_title": "Mitra AI Assistant"
+		"default_title": "AI Assistant"
 	},
 	"options_page": "src/options/options.html",
 	"content_scripts": [
