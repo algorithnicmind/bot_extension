@@ -1,4 +1,3 @@
-importScripts("../../assets/lib/marked.umd.js");
 
 // Basic background worker
 console.log("AI Background Assistant started.");
