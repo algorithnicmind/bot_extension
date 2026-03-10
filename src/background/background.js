@@ -1,24 +1,20 @@
-importScripts(
-	"../../assets/lib/marked.umd.js",
-);
+importScripts("../../assets/lib/marked.umd.js");
 
 // Basic background worker
 console.log("Mitra AI Background Assistant started.");
 
 // Keep track of any open popup or state if needed
-let state = {
-	isProcessing: false,
-};
+// (State can be added here if background needs to maintain memory across interactions)
 
 // Listen for messages from popup or content scripts
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 	if (request.action === "askAI") {
 		const { text, promptType, actionDescription, userPrompt } = request;
 
 		console.log(`Received request to: ${actionDescription}`);
 
 		// Get API key from storage before making request
-		chrome.storage.local.get(["apiKey", "provider"], function (result) {
+		chrome.storage.local.get(["apiKey", "provider"], (result) => {
 			if (!result.apiKey) {
 				sendResponse({
 					error:
@@ -30,7 +26,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			console.log(`Using AI Provider: ${result.provider}`);
 
 			// We use an async wrapper to let the event listener return true
-			handleAIRequest(result.provider, result.apiKey, text, promptType, userPrompt)
+			handleAIRequest(
+				result.provider,
+				result.apiKey,
+				text,
+				promptType,
+				userPrompt,
+			)
 				.then((aiResponse) => {
 					sendResponse({ result: aiResponse });
 				})
@@ -59,7 +61,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
  * Handle making actual API requests natively using Google Gemini
  * Note: You can expand this generic function to route to OpenAI / Claude based on state later.
  */
-async function handleAIRequest(provider, apiKey, contextText, type, userPrompt = null) {
+async function handleAIRequest(
+	provider,
+	apiKey,
+	contextText,
+	type,
+	userPrompt = null,
+) {
 	// Construct the actual prompt based on user request and our standard 5_api_prompts list
 	let systemInstruction = "";
 
@@ -90,10 +98,10 @@ async function handleAIRequest(provider, apiKey, contextText, type, userPrompt =
 	}
 
 	let userMessage = contextText;
-	
+
 	if (type === "chat" && userPrompt) {
-	    // If it's a chat type, the user message is the active question + the context
-	    userMessage = `Question: ${userPrompt}\n\nContext:\n${contextText}`;
+		// If it's a chat type, the user message is the active question + the context
+		userMessage = `Question: ${userPrompt}\n\nContext:\n${contextText}`;
 	}
 
 	// Route request based on chosen provider
@@ -133,13 +141,13 @@ async function callGeminiAPI(apiKey, systemInstruction, userMessage) {
 	});
 
 	if (!response.ok) {
-		let errMsg = await response.text();
+		const errMsg = await response.text();
 		throw new Error(`Gemini API Error: ${response.status} - ${errMsg}`);
 	}
 
 	const data = await response.json();
 
-	if (data && data.candidates && data.candidates.length > 0) {
+	if (data?.candidates?.length > 0) {
 		return data.candidates[0].content.parts[0].text;
 	} else {
 		throw new Error("Unexpected response format from Gemini API.");

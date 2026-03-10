@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		try {
 			// Get Active Tab
-			let [tab] = await chrome.tabs.query({
+			const [tab] = await chrome.tabs.query({
 				active: true,
 				currentWindow: true,
 			});
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 
 			// Inject a content script natively to scrape page content
-			let injectionResult = await chrome.scripting.executeScript({
+			const injectionResult = await chrome.scripting.executeScript({
 				target: { tabId: tab.id },
 				func: scrapePageContent,
 			});
@@ -77,13 +77,11 @@ document.addEventListener("DOMContentLoaded", () => {
 			const pageText = injectionResult[0].result;
 
 			if (!pageText || pageText.length < 50) {
-				hideLoaderAndShowError(
-					"Not enough text found on this page.",
-				);
+				hideLoaderAndShowError("Not enough text found on this page.");
 				return;
 			}
 
-			let payload = {
+			const payload = {
 				action: "askAI",
 				promptType: promptType,
 				actionDescription: actionDescription,
@@ -95,26 +93,23 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 
 			// Send to Background script to query the AI Model securely
-			chrome.runtime.sendMessage(
-				payload,
-				(response) => {
-					if (chrome.runtime.lastError) {
-						hideLoaderAndShowError(
-							"Background script error: " + chrome.runtime.lastError.message,
-						);
-						return;
-					}
-					if (response && response.error) {
-						hideLoaderAndShowError(response.error);
-					} else if (response && response.result) {
-						displayResult(response.result);
-					} else {
-						hideLoaderAndShowError(
-							"Unknown error occurred while processing AI response.",
-						);
-					}
-				},
-			);
+			chrome.runtime.sendMessage(payload, (response) => {
+				if (chrome.runtime.lastError) {
+					hideLoaderAndShowError(
+						"Background script error: " + chrome.runtime.lastError.message,
+					);
+					return;
+				}
+				if (response && response.error) {
+					hideLoaderAndShowError(response.error);
+				} else if (response && response.result) {
+					displayResult(response.result);
+				} else {
+					hideLoaderAndShowError(
+						"Unknown error occurred while processing AI response.",
+					);
+				}
+			});
 		} catch (error) {
 			hideLoaderAndShowError("Failed to access page data: " + error.message);
 		}
@@ -134,10 +129,11 @@ document.addEventListener("DOMContentLoaded", () => {
 	document.getElementById("btnExplain").addEventListener("click", () => {
 		runAITask("explain_page", "Explain Document Concepts");
 	});
-	// Note: Explain Selected is mostly handled by the floating button directly in content.js, 
+	// Note: Explain Selected is mostly handled by the floating button directly in content.js,
 	// but we can let it explain the general page concepts here if they click it.
 	document.getElementById("btnExplain").disabled = false;
-	document.getElementById("btnExplain").title = "Explain key concepts on this page";
+	document.getElementById("btnExplain").title =
+		"Explain key concepts on this page";
 
 	// ACTION: Contextual Chat
 	const chatInput = document.getElementById("chatInput");

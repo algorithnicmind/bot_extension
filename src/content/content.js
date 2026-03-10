@@ -14,7 +14,8 @@ function initShadowDOM() {
 		shadowHost = document.createElement("div");
 		shadowHost.id = "mitra-ai-shadow-host";
 		// Ensure it sits on top of everything and doesn't interfere with layout
-		shadowHost.style.cssText = "position: absolute; top: 0; left: 0; width: 0; height: 0; overflow: visible; z-index: 2147483647;";
+		shadowHost.style.cssText =
+			"position: absolute; top: 0; left: 0; width: 0; height: 0; overflow: visible; z-index: 2147483647;";
 		document.body.appendChild(shadowHost);
 
 		shadowRoot = shadowHost.attachShadow({ mode: "closed" });
@@ -78,10 +79,10 @@ function initShadowDOM() {
 	}
 }
 
-document.addEventListener("mouseup", function (e) {
+document.addEventListener("mouseup", (e) => {
 	// Small delay to allow selection to register
 	setTimeout(() => {
-		let selectedText = window.getSelection().toString().trim();
+		const selectedText = window.getSelection().toString().trim();
 		if (selectedText.length > 5) {
 			currentSelectedText = selectedText;
 			showFloatingButton(e.pageX, e.pageY);
@@ -92,19 +93,24 @@ document.addEventListener("mouseup", function (e) {
 });
 
 // Hide on mousedown if clicking elsewhere
-document.addEventListener("mousedown", function(e) {
-    // If click is not inside shadowRoot, then hide
-    if (shadowRoot) {
-        const path = e.composedPath();
-        if (floatingBtn && !path.includes(floatingBtn) && tooltipBox && !path.includes(tooltipBox)) {
-            hideFloatingButton();
-            if (tooltipBox) tooltipBox.style.display = "none";
-        }
-    }
+document.addEventListener("mousedown", (e) => {
+	// If click is not inside shadowRoot, then hide
+	if (shadowRoot) {
+		const path = e.composedPath();
+		if (
+			floatingBtn &&
+			!path.includes(floatingBtn) &&
+			tooltipBox &&
+			!path.includes(tooltipBox)
+		) {
+			hideFloatingButton();
+			if (tooltipBox) tooltipBox.style.display = "none";
+		}
+	}
 });
 
 function showFloatingButton(x, y) {
-    initShadowDOM();
+	initShadowDOM();
 
 	if (!floatingBtn) {
 		floatingBtn = document.createElement("button");
@@ -129,7 +135,7 @@ function handleFloatingClick(e) {
 	e.stopPropagation();
 	if (!currentSelectedText) return;
 
-	let originalText = floatingBtn.innerText;
+	const originalText = floatingBtn.innerText;
 	floatingBtn.innerText = "⏳ Thinking...";
 	floatingBtn.disabled = true;
 
@@ -146,22 +152,36 @@ function handleFloatingClick(e) {
 			hideFloatingButton();
 
 			if (chrome.runtime.lastError) {
-				showTooltip("<span class='mitra-ai-error'>Error: " + chrome.runtime.lastError.message + "</span>", e.pageX, e.pageY);
+				showTooltip(
+					"<span class='mitra-ai-error'>Error: " +
+						chrome.runtime.lastError.message +
+						"</span>",
+					e.pageX,
+					e.pageY,
+				);
 				return;
 			}
-			if (response && response.error) {
-				showTooltip("<span class='mitra-ai-error'>Error: " + response.error + "</span>", e.pageX, e.pageY);
-			} else if (response && response.result) {
+			if (response?.error) {
+				showTooltip(
+					"<span class='mitra-ai-error'>Error: " + response.error + "</span>",
+					e.pageX,
+					e.pageY,
+				);
+			} else if (response?.result) {
 				showTooltip(response.result, e.pageX, e.pageY);
 			} else {
-				showTooltip("<span class='mitra-ai-error'>Unknown error occurred.</span>", e.pageX, e.pageY);
+				showTooltip(
+					"<span class='mitra-ai-error'>Unknown error occurred.</span>",
+					e.pageX,
+					e.pageY,
+				);
 			}
-		}
+		},
 	);
 }
 
 function showTooltip(text, x, y) {
-    initShadowDOM();
+	initShadowDOM();
 
 	if (!tooltipBox) {
 		tooltipBox = document.createElement("div");
@@ -184,12 +204,14 @@ function showTooltip(text, x, y) {
 	}
 
 	// Basic formatting for Markdown-like response
-    const formattedText = text.replace(/\n\n/g, '<br><br>').replace(/\n/g, ' ');
-	tooltipBox.querySelector(".mitra-ai-tooltip-content").innerHTML = formattedText;
-	
-    // Ensure it doesn't flow off the screen
-    const tooltipWidth = 300;
-	tooltipBox.style.left = Math.min(x, window.innerWidth - tooltipWidth - 20) + "px";
-	tooltipBox.style.top = (parseInt(y, 10) + 30) + "px";
+	const formattedText = text.replace(/\n\n/g, "<br><br>").replace(/\n/g, " ");
+	tooltipBox.querySelector(".mitra-ai-tooltip-content").innerHTML =
+		formattedText;
+
+	// Ensure it doesn't flow off the screen
+	const tooltipWidth = 300;
+	tooltipBox.style.left =
+		Math.min(x, window.innerWidth - tooltipWidth - 20) + "px";
+	tooltipBox.style.top = parseInt(y, 10) + 30 + "px";
 	tooltipBox.style.display = "block";
 }
