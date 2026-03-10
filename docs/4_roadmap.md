@@ -41,9 +41,9 @@ _Objective: Build out the specific AI capabilities._
 
 _Objective: Make it look professional and user-friendly._
 
-- [ ] Design a clean, modern UI for the popup using CSS (animations, loading states, error handling).
-- [ ] Design the floating tooltips injected onto the page to ensure they don't break the host website's layout (using Shadow DOM if necessary).
-- [ ] Add nice vector icons and ensure responsive design.
+- [x] Design a clean, modern UI for the popup using CSS (animations, loading states, error handling).
+- [x] Design the floating tooltips injected onto the page to ensure they don't break the host website's layout (using Shadow DOM if necessary).
+- [x] Add nice vector icons and ensure responsive design.
 
 ## Phase 6: Testing & Publishing
 

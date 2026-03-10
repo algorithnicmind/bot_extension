@@ -143,7 +143,7 @@
 
   </style>
   <!-- Load Markdown Parser -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+  <script src="../../assets/lib/marked.umd.js"></script>
 </head>
 <body>
 
@@ -151,17 +151,17 @@
     <div class="header-logo">
       <span>✨</span> Mitra AI
     </div>
-    <button class="icon-btn" id="settingsBtn" title="Settings">⚙️</button>
+    <button type="button" class="icon-btn" id="settingsBtn" title="Settings">⚙️</button>
   </div>
 
   <div class="actions-grid" style="grid-template-columns: 1fr 1fr; gap: 10px;">
-    <button class="action-btn" id="btnSummarize">
+    <button type="button" class="action-btn" id="btnSummarize">
       <span class="emoji">📝</span> Summarize
     </button>
-    <button class="action-btn" id="btnTranslate">
+    <button type="button" class="action-btn" id="btnTranslate">
       <span class="emoji">🌐</span> Translate
     </button>
-    <button class="action-btn" id="btnExplain" disabled title="Highlight text on the page first" style="grid-column: span 2;">
+    <button type="button" class="action-btn" id="btnExplain" disabled title="Highlight text on the page first" style="grid-column: span 2;">
       <span class="emoji">🧠</span> Explain Selected Text
     </button>
   </div>
@@ -182,7 +182,7 @@
 
   <div class="chat-input-container" style="padding: 15px; border-top: 1px solid var(--border); display: flex; gap: 8px; background-color: var(--bg);">
     <input type="text" id="chatInput" placeholder="Ask about this page..." style="flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-family: inherit;">
-    <button id="btnChat" style="background: var(--primary); color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 500; transition: background 0.2s;">Ask</button>
+    <button type="button" id="btnChat" style="background: var(--primary); color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 500; transition: background 0.2s;">Ask</button>
   </div>
 
   <script src="popup.js" type="module"></script>
