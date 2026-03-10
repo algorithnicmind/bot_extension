@@ -13,7 +13,7 @@ let state = {
 // Listen for messages from popup or content scripts
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 	if (request.action === "askAI") {
-		const { text, promptType, actionDescription } = request;
+		const { text, promptType, actionDescription, userPrompt } = request;
 
 		console.log(`Received request to: ${actionDescription}`);
 
@@ -30,7 +30,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			console.log(`Using AI Provider: ${result.provider}`);
 
 			// We use an async wrapper to let the event listener return true
-			handleAIRequest(result.provider, result.apiKey, text, promptType)
+			handleAIRequest(result.provider, result.apiKey, text, promptType, userPrompt)
 				.then((aiResponse) => {
 					sendResponse({ result: aiResponse });
 				})
@@ -59,7 +59,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
  * Handle making actual API requests natively using Google Gemini
  * Note: You can expand this generic function to route to OpenAI / Claude based on state later.
  */
-async function handleAIRequest(provider, apiKey, contextText, type) {
+async function handleAIRequest(provider, apiKey, contextText, type, userPrompt = null) {
 	// Construct the actual prompt based on user request and our standard 5_api_prompts list
 	let systemInstruction = "";
 
@@ -72,12 +72,29 @@ async function handleAIRequest(provider, apiKey, contextText, type) {
 			systemInstruction =
 				"You are a knowledgeable and patient teacher. The user has highlighted a specific piece of text from an article they are reading. Your task is to explain the highlighted text simply and clearly. Break down any complex jargon or technical terms. If helpful to understanding, provide a short analogy. Keep your explanation brief, within 2-3 short paragraphs.";
 			break;
+		case "translate":
+			systemInstruction =
+				"You are a master translator. Detect the original language of the provided text, and accurately translate the core content into English. If it is already in English, translate it to Spanish. Preserve the original meaning and tone.";
+			break;
+		case "explain_page":
+			systemInstruction =
+				"You are an expert tutor. Formulate a list of the key concepts and jargon present in this text, and explain each of them clearly.";
+			break;
+		case "chat":
+			systemInstruction =
+				"You are an AI sidekick attached to the user's browser. The user has provided the text of the current webpage they are looking at as context. Answer the user's question directly based on the provided text context. Do not invent new facts. If the answer is not in the context, tell the user.";
+			break;
 		default:
 			systemInstruction =
 				"You are a helpful AI assistant. Answer the user's question clearly and concisely based on the context provided.";
 	}
 
 	let userMessage = contextText;
+	
+	if (type === "chat" && userPrompt) {
+	    // If it's a chat type, the user message is the active question + the context
+	    userMessage = `Question: ${userPrompt}\n\nContext:\n${contextText}`;
+	}
 
 	// Route request based on chosen provider
 	if (provider === "gemini") {

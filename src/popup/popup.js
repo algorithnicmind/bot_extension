@@ -49,8 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
 		chrome.runtime.sendMessage({ action: "openOptions" });
 	});
 
-	// ACTION: Summarize Page
-	btnSummarize.addEventListener("click", async () => {
+	// Generalized function to run AI tasks
+	async function runAITask(promptType, actionDescription, userPrompt = null) {
 		showLoader();
 
 		try {
@@ -78,19 +78,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			if (!pageText || pageText.length < 50) {
 				hideLoaderAndShowError(
-					"Not enough text found on this page to summarize.",
+					"Not enough text found on this page.",
 				);
 				return;
 			}
 
+			let payload = {
+				action: "askAI",
+				promptType: promptType,
+				actionDescription: actionDescription,
+				text: pageText,
+			};
+
+			if (userPrompt) {
+				payload.userPrompt = userPrompt;
+			}
+
 			// Send to Background script to query the AI Model securely
 			chrome.runtime.sendMessage(
-				{
-					action: "askAI",
-					promptType: "summarize",
-					actionDescription: "Summarize Document",
-					text: pageText,
-				},
+				payload,
 				(response) => {
 					if (chrome.runtime.lastError) {
 						hideLoaderAndShowError(
@@ -111,6 +117,43 @@ document.addEventListener("DOMContentLoaded", () => {
 			);
 		} catch (error) {
 			hideLoaderAndShowError("Failed to access page data: " + error.message);
+		}
+	}
+
+	// ACTION: Summarize Page
+	btnSummarize.addEventListener("click", () => {
+		runAITask("summarize", "Summarize Document");
+	});
+
+	// ACTION: Translate Page
+	document.getElementById("btnTranslate").addEventListener("click", () => {
+		runAITask("translate", "Translate Document");
+	});
+
+	// ACTION: Explain Selected (Simplified for overall page if nothing selected, or context based)
+	document.getElementById("btnExplain").addEventListener("click", () => {
+		runAITask("explain_page", "Explain Document Concepts");
+	});
+	// Note: Explain Selected is mostly handled by the floating button directly in content.js, 
+	// but we can let it explain the general page concepts here if they click it.
+	document.getElementById("btnExplain").disabled = false;
+	document.getElementById("btnExplain").title = "Explain key concepts on this page";
+
+	// ACTION: Contextual Chat
+	const chatInput = document.getElementById("chatInput");
+	const btnChat = document.getElementById("btnChat");
+
+	btnChat.addEventListener("click", () => {
+		const q = chatInput.value.trim();
+		if (q) {
+			runAITask("chat", "Chat about Document", q);
+			chatInput.value = "";
+		}
+	});
+
+	chatInput.addEventListener("keypress", (e) => {
+		if (e.key === "Enter") {
+			btnChat.click();
 		}
 	});
 });
