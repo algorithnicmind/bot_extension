@@ -2,7 +2,7 @@
 const renderMarkdown = (text) => {
 	try {
 		return marked.parse(text);
-	} catch (e) {
+	} catch (_e) {
 		console.warn("Marked not loaded, displaying raw text.");
 		return text;
 	}
@@ -96,13 +96,13 @@ document.addEventListener("DOMContentLoaded", () => {
 			chrome.runtime.sendMessage(payload, (response) => {
 				if (chrome.runtime.lastError) {
 					hideLoaderAndShowError(
-						"Background script error: " + chrome.runtime.lastError.message,
+						`Background script error: ${chrome.runtime.lastError.message}`,
 					);
 					return;
 				}
-				if (response && response.error) {
+				if (response?.error) {
 					hideLoaderAndShowError(response.error);
-				} else if (response && response.result) {
+				} else if (response?.result) {
 					displayResult(response.result);
 				} else {
 					hideLoaderAndShowError(
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				}
 			});
 		} catch (error) {
-			hideLoaderAndShowError("Failed to access page data: " + error.message);
+			hideLoaderAndShowError(`Failed to access page data: ${error.message}`);
 		}
 	}
 
