@@ -163,7 +163,7 @@ function handleFloatingClick(e) {
 			}
 			if (response?.error) {
 				showTooltip(
-					"<span class='mitra-ai-error'>Error: " + response.error + "</span>",
+					`<span class='mitra-ai-error'>Error: ${response.error}</span>`,
 					e.pageX,
 					e.pageY,
 				);
@@ -210,8 +210,7 @@ function showTooltip(text, x, y) {
 
 	// Ensure it doesn't flow off the screen
 	const tooltipWidth = 300;
-	tooltipBox.style.left =
-		Math.min(x, window.innerWidth - tooltipWidth - 20) + "px";
-	tooltipBox.style.top = parseInt(y, 10) + 30 + "px";
+	tooltipBox.style.left = `${Math.min(x, window.innerWidth - tooltipWidth - 20)}px`;
+	tooltipBox.style.top = `${parseInt(y, 10) + 30}px`;
 	tooltipBox.style.display = "block";
 }
