@@ -9,15 +9,15 @@ chrome.runtime.onMessage.addListener((request) => {
 	if (request.action === "showAIResponse") {
 		const { text, type } = request;
 		showFloatingButton(window.innerWidth / 2, window.innerHeight / 2, true);
-		
+
 		// Map type to display text
 		const descriptions = {
 			summarize: "Summarizing Selection...",
 			explain: "Explaining Selection...",
-			translate: "Translating Selection..."
+			translate: "Translating Selection...",
 		};
-		
-		floatingBtn.innerText = "⏳ " + (descriptions[type] || "Thinking...");
+
+		floatingBtn.innerText = `⏳ ${descriptions[type] || "Thinking..."}`;
 		floatingBtn.disabled = true;
 
 		chrome.runtime.sendMessage(
@@ -33,11 +33,19 @@ chrome.runtime.onMessage.addListener((request) => {
 				hideFloatingButton();
 
 				if (response?.result) {
-					showTooltip(response.result, window.innerWidth / 2 - 150, window.innerHeight / 2 - 100);
+					showTooltip(
+						response.result,
+						window.innerWidth / 2 - 150,
+						window.innerHeight / 2 - 100,
+					);
 				} else {
-					showTooltip(response?.error || "Error processing request", window.innerWidth / 2 - 150, window.innerHeight / 2 - 100);
+					showTooltip(
+						response?.error || "Error processing request",
+						window.innerWidth / 2 - 150,
+						window.innerHeight / 2 - 100,
+					);
 				}
-			}
+			},
 		);
 	}
 });
@@ -186,9 +194,7 @@ function handleFloatingClick(e) {
 
 			if (chrome.runtime.lastError) {
 				showTooltip(
-					"<span class='ai-assistant-error'>Error: " +
-						chrome.runtime.lastError.message +
-						"</span>",
+					`<span class='ai-assistant-error'>Error: ${chrome.runtime.lastError.message}</span>`,
 					e.pageX,
 					e.pageY,
 				);

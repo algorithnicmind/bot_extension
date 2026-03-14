@@ -1,4 +1,3 @@
-
 import { handleAIRequest } from "../utils/api.js";
 
 // Basic background worker
@@ -25,14 +24,23 @@ chrome.runtime.onInstalled.addListener(() => {
 
 // Handle context menu clicks
 chrome.contextMenus.onClicked.addListener((info, tab) => {
-	if (info.menuItemId === "summarizeText" || info.menuItemId === "explainText" || info.menuItemId === "translateText") {
-		const type = info.menuItemId === "summarizeText" ? "summarize" : (info.menuItemId === "explainText" ? "explain" : "translate");
-		
+	if (
+		info.menuItemId === "summarizeText" ||
+		info.menuItemId === "explainText" ||
+		info.menuItemId === "translateText"
+	) {
+		const type =
+			info.menuItemId === "summarizeText"
+				? "summarize"
+				: info.menuItemId === "explainText"
+					? "explain"
+					: "translate";
+
 		// Send message to content script to show the UI
 		chrome.tabs.sendMessage(tab.id, {
 			action: "showAIResponse",
 			text: info.selectionText,
-			type: type
+			type: type,
 		});
 	}
 });
