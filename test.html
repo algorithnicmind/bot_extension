@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Test Extension</title>
+</head>
+<body>
+
+<p>This is a paragraph of text. Selecting this text should show a magical floating button from the content script AI assistant magically appearing here.</p>
+<p>And here is another paragraph of text to select. If it selects properly, testing will be very easy!</p>
+
+<script>
+// Mock chrome.runtime
+window.chrome = {
+    runtime: {
+        sendMessage: (msg, callback) => {
+            console.log("Mock sendMessage called with", msg);
+            setTimeout(() => {
+                callback({ result: "**AI Response**\n\nThis is a mocked response." });
+            }, 1000);
+        },
+        lastError: null
+    }
+};
+</script>
+<script src="src/content/content.js"></script>
+
+</body>
+</html>

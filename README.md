@@ -21,6 +21,7 @@ This **AI Assistant Chrome Extension** seamlessly weaves large language models i
 | **🧠 Explain In-Context** | Highlight confusing sentences, technical jargon, or code blocks on any site, and a floating **✨ Ask AI** tooltip will explain it to you directly. |
 | **🌐 Translate Anywhere** | Instantly overcome language barriers on the fly. Accurately translate selected content. |
 | **💬 Direct Page Chat** | Open the extension and talk _with_ the webpage. The AI understands the context of the page you are on. |
+| **🖱️ Context Menu** | Right-click any selection to quickly Summarize, Explain, or Translate via the browser's context menu. |
 
 ---
 

@@ -1,13 +1,46 @@
-// AI Assistant Content Script Payload
-// Will be injected onto web pages to detect highlights, spawn floating buttons, etc.
-
-console.log("AI Assistant Content Script loaded");
-
 let shadowHost = null;
 let shadowRoot = null;
 let floatingBtn = null;
 let tooltipBox = null;
 let currentSelectedText = "";
+
+// Listen for messages from background (e.g., from context menu)
+chrome.runtime.onMessage.addListener((request) => {
+	if (request.action === "showAIResponse") {
+		const { text, type } = request;
+		showFloatingButton(window.innerWidth / 2, window.innerHeight / 2, true);
+		
+		// Map type to display text
+		const descriptions = {
+			summarize: "Summarizing Selection...",
+			explain: "Explaining Selection...",
+			translate: "Translating Selection..."
+		};
+		
+		floatingBtn.innerText = "⏳ " + (descriptions[type] || "Thinking...");
+		floatingBtn.disabled = true;
+
+		chrome.runtime.sendMessage(
+			{
+				action: "askAI",
+				promptType: type,
+				actionDescription: descriptions[type] || "AI Action",
+				text: text,
+			},
+			(response) => {
+				floatingBtn.innerText = "✨ Ask AI";
+				floatingBtn.disabled = false;
+				hideFloatingButton();
+
+				if (response?.result) {
+					showTooltip(response.result, window.innerWidth / 2 - 150, window.innerHeight / 2 - 100);
+				} else {
+					showTooltip(response?.error || "Error processing request", window.innerWidth / 2 - 150, window.innerHeight / 2 - 100);
+				}
+			}
+		);
+	}
+});
 
 function initShadowDOM() {
 	if (!shadowHost) {
