@@ -1,9 +1,10 @@
+const path = require('node:path');
 const { chromium } = require('playwright');
 (async () => {
     console.log("Starting Playwright...");
     const browser = await chromium.launch({headless: true});
     const page = await browser.newPage();
-    const url = 'file:///' + require('path').resolve('test.html').replace(/\\/g, '/');
+    const url = `file:///${path.resolve('test.html').replace(/\\/g, '/')}`;
     console.log("Navigating to", url);
     await page.goto(url);
     

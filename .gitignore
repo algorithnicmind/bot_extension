@@ -1,0 +1,23 @@
+# Environment variables
+.env
+
+# Dependencies
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build files (if applicable)
+dist/
+build/
+
+# Local test scripts
+test_script.js
+test.html
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.bak
