@@ -14,6 +14,8 @@ This is the standard structure we will be aiming for:
 ```
 bot_extension/
 │
+├── .gitignore            # Files to ignore in Git (e.g., .env)
+├── .env.example          # Template for environment variables
 ├── manifest.json         # Extension configuration
 ├── src/
 │   ├── background/
@@ -38,7 +40,14 @@ bot_extension/
 └── docs/                 # Project documentation
 ```
 
-## 3. How to Load the Extension Locally
+## 3. Security & Environment Variables
+
+To keep your API keys private:
+1. Copy `.env.example` and rename it to `.env`.
+2. Enter your API keys in the `.env` file (for reference).
+3. The `.gitignore` file is configured to prevent your actual `.env` file from being committed to GitHub.
+
+## 4. How to Load the Extension Locally
 
 1. Open Google Chrome and navigate to `chrome://extensions/`.
 2. Turn on the **Developer mode** toggle in the top right corner.
@@ -47,7 +56,7 @@ bot_extension/
 5. The extension should now appear in your list of extensions and be usable in the browser.
 6. **Note:** Whenever you make changes to the code (especially `manifest.json` or `background.js`), you must click the **refresh icon** on the extension card in `chrome://extensions/` for the changes to take effect.
 
-## 4. Coding Standards & Best Practices
+## 5. Coding Standards & Best Practices
 
 - **Security First:** Never hardcode API keys directly into public repositories. Use an `options` page so users can provide their own key, or use a proxy backend to handle API requests securely.
 - **Permissions:** Only request the exact permissions needed in `manifest.json` (e.g., `activeTab` instead of `<all_urls>` if possible) to ensure user trust and ease of Chrome Web Store review.
