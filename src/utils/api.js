@@ -102,7 +102,10 @@ async function callOpenAI(apiKey, systemInstruction, userMessage) {
 	});
 
 	if (!response.ok) {
-		throw new Error(`OpenAI API Error: ${response.statusText}`);
+		const errorData = await response.json().catch(() => ({}));
+		throw new Error(
+			`OpenAI API Error: ${response.status} ${errorData.error?.message || response.statusText}`,
+		);
 	}
 	const data = await response.json();
 	return data.choices[0].message.content;
@@ -126,7 +129,10 @@ async function callAnthropic(apiKey, systemInstruction, userMessage) {
 	});
 
 	if (!response.ok) {
-		throw new Error(`Claude API Error: ${response.statusText}`);
+		const errorData = await response.json().catch(() => ({}));
+		throw new Error(
+			`Claude API Error: ${response.status} ${errorData.error?.message || response.statusText}`,
+		);
 	}
 	const data = await response.json();
 	return data.content[0].text;
