@@ -119,6 +119,7 @@ async function callAnthropic(apiKey, systemInstruction, userMessage) {
 			"x-api-key": apiKey,
 			"anthropic-version": "2023-06-01",
 			"content-type": "application/json",
+			"anthropic-dangerous-direct-browser-access": "true",
 		},
 		body: JSON.stringify({
 			model: "claude-3-haiku-20240307",
